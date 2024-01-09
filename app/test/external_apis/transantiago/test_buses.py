@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from helpers.transantiago import TransantiagoAPI
+from app.helpers.transantiago import TransantiagoAPI
 
 class TestTransantiagoAPI(unittest.TestCase):
 

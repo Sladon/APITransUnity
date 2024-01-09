@@ -6,7 +6,7 @@ import re
 import base64
 import requests
 
-from helpers.general import add_params
+from .general import add_params, request
 
 class TransantiagoAPI:
     """
@@ -59,9 +59,9 @@ class TransantiagoAPI:
         else:
             stop = self.get_stops()[0]
 
-            res = requests.get(add_params(self.URL_FOR_TOKEN, codsimt=stop), timeout=self.TIMEOUT)
+            html_content = request(add_params(self.URL_FOR_TOKEN, codsimt=stop), timeout=self.TIMEOUT, plain_text=True)
             jwt_pattern = r"\$jwt\s*=\s*'\w+\W*';"
-            match = re.search(jwt_pattern, res.text)
+            match = re.search(jwt_pattern, html_content)
 
             if match:
                 jwt_token = match.group()
@@ -91,8 +91,8 @@ class TransantiagoAPI:
         """
 
         url = add_params(self.GET_ARRIVALS_ENDPOINT, t=self.__token, codsimt=stop_codsimt, codser="")
-        res = requests.get(url, timeout=self.TIMEOUT)
-        return json.loads(res.text)
+        prediction = request(url)
+        return prediction
 
     def get_stops(self, ) -> list[str]:
         """
@@ -101,8 +101,8 @@ class TransantiagoAPI:
         Returns:
         - list[str]: A list of bus stop codes.
         """
-        res = requests.get(self.GET_STOPS_ENDPOINT, timeout=self.TIMEOUT)
-        return json.loads(res.text)
+        stops = request(self.GET_STOPS_ENDPOINT)
+        return stops
 
     def get_bus_route(self, bus_codsint: str) -> dict:
         """
@@ -115,10 +115,8 @@ class TransantiagoAPI:
         Returns:
         - dict: The response object containing the route information for the specified bus.
         """
-        res = requests.get(
-            add_params(self.GET_ROUTE_ENDPOINT, codsint=bus_codsint), timeout=self.TIMEOUT
-            )
-        return json.loads(res.text)
+        route = request(add_params(self.GET_ROUTE_ENDPOINT, codsint=bus_codsint))
+        return route
 
     def get_all_buses(self,) -> list[str]:
         """
@@ -127,5 +125,8 @@ class TransantiagoAPI:
         Returns:
         - List[str]: A list of strings containing information about all buses.
         """
-        res = requests.get(self.GET_BUSES_ENDPOINT, timeout=self.TIMEOUT)
-        return json.loads(res.text)
+        buses = request(self.GET_BUSES_ENDPOINT)
+        return buses
+
+a = TransantiagoAPI()
+a.set_token()
