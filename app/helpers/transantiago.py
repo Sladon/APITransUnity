@@ -5,6 +5,8 @@ import json
 import re
 import base64
 import requests
+from bs4 import BeautifulSoup
+from datetime import date
 
 from .general import add_params, request
 
@@ -128,5 +130,67 @@ class TransantiagoAPI:
         buses = request(self.GET_BUSES_ENDPOINT)
         return buses
 
-a = TransantiagoAPI()
-a.set_token()
+    def get_detours(self,) -> list[dict]:
+
+        months = {
+            'Ene': 1,
+            'Feb': 2,
+            'Mar': 3,
+            'Abr': 4,
+            'May': 5,
+            'Jun': 6,
+            'Jul': 7,
+            'Ago': 8,
+            'Sep': 9,
+            'Oct': 10,
+            'Nov': 11,
+            'Dic': 12,
+        }
+
+        url = self.BASE_DOMAIN + 'estado-del-servicio/'
+        html = request(url, plain_text=True)
+        soup = BeautifulSoup(html, 'html.parser')
+
+        container = soup.find('div', class_='tab-content-interior')
+
+        rows = container.select('tbody tr')
+
+        detours = []
+
+        for row in rows:
+            str_dates = row.select_one('td[scope="row"]').text
+            bus_route = row.select_one('.recorrido a').text
+            direction = row.select_one('.hidden-xs:nth-child(3)').text.strip()
+            affected_communes = row.select_one('.hidden-xs:nth-child(4)').text.strip()
+            description = row.select_one('.hidden-xs.descripcion').text.strip()
+            href = row.select_one('.ampliar-info')['href']
+        
+            lst_start_date, lst_end_date = [str_date.strip().split() for str_date in str_dates.split('-')]
+            
+            end_date_valid = len(lst_end_date) == len(lst_start_date)
+
+            lst_start_date[0] = int(lst_start_date[0])
+            lst_start_date[1] = months[lst_start_date[1]]
+            lst_start_date[2] = int(lst_start_date[2])
+            start_date = date(lst_start_date[2], lst_start_date[1], lst_start_date[0])
+            
+            if end_date_valid:
+                lst_end_date[0] = int(lst_end_date[0])
+                lst_end_date[1] = months[lst_end_date[1]]
+                lst_end_date[2] = int(lst_end_date[2])
+                end_date = date(lst_end_date[2], lst_end_date[1], lst_end_date[0])
+            else: end_date = 'undefined'
+
+            detour = {
+                'start_date': str(start_date),
+                'end_date': str(end_date),
+                'affected_routes': bus_route,
+                'affected_directions': direction,
+                'affected_communes': affected_communes,
+                'description': description,
+                'url': href
+            }
+
+            detours.append(detour)
+
+        return detours

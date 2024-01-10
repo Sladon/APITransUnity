@@ -52,5 +52,3 @@ def get_date(time_offset: int = 10) -> datetime:
     current_date = datetime.now()
     new_date = current_date + timedelta(minutes=10)
     return new_date
-    # date = new_date.strftime("%d/%m/%Y")
-    # time = new_date.strftime("%H%:M")
