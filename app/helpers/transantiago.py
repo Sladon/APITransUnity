@@ -47,6 +47,7 @@ class TransantiagoAPI:
 
     def __init__(self):
         self.__token: str = ""
+        self.set_token()
 
     def set_token(self, token:str=None):
         """

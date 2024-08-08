@@ -1,9 +1,7 @@
 from . import router
 from ..helpers.general import request
 from ..helpers.transantiago import TransantiagoAPI
+from .transantiago import router as transantiago_router
 import requests
 
-@router.get("/stops")
-def get_stops():
-    res = request("https://www.red.cl/restservice_v2/rest/getparadas/all")
-    return res
+router.include_router(transantiago_router, prefix="/transantiago", tags=["transantiago"])
