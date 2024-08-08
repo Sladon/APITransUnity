@@ -117,7 +117,8 @@ class TransantiagoAPI:
         Returns:
         - dict: The response object containing the route information for the specified bus.
         """
-        route = request(add_params(self.GET_ROUTE_ENDPOINT, codsint=bus_codsint))
+        endpoint = add_params(self.GET_ROUTE_ENDPOINT, codsint=bus_codsint)
+        route = request(endpoint)
         return route
 
     def get_all_buses(self,) -> list[str]:
