@@ -1,9 +1,15 @@
-from ..helpers.general import request
-from ..helpers.transantiago import TransantiagoAPI
+from fastapi import APIRouter
+from ....external_api.transantiago import TransantiagoAPI
 from time import time
 from fastapi import APIRouter, Path
 
-router = APIRouter()
+
+router = APIRouter(
+    prefix="/red_movilidad",
+    tags=["buses"],
+    responses={404: {"description": "Not found"}},
+)
+
 
 class TransantiagoData:
 
@@ -31,11 +37,14 @@ class TransantiagoData:
             self.__buses_last_update = time()
         return {"buses": self.__buses}
 
+
 data = TransantiagoData()
+
 
 @router.get("/stops")
 def get_stops():
     return data.get_stops()
+
 
 @router.get("/stops/{stop}")
 def get_stop(stop: str):
@@ -44,13 +53,15 @@ def get_stop(stop: str):
         return {"error": "Invalid stop"}
     return response
 
+
 @router.get("/buses")
 def get_buses():
     return data.get_buses()
 
+
 @router.get("/buses/{bus}")
 def get_bus(bus: str):
     response = data.api.get_bus_route(bus)
-    if not(len(response)):
+    if not (len(response)):
         return {"error": "Invalid bus"}
     return response

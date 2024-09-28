@@ -10,6 +10,7 @@ from datetime import date
 
 from .general import add_params, request
 
+
 class TransantiagoAPI:
     """
     A class for interacting with the Transantiago API.
@@ -49,7 +50,7 @@ class TransantiagoAPI:
         self.__token: str = ""
         self.set_token()
 
-    def set_token(self, token:str=None):
+    def set_token(self, token: str = None):
         """
         Sets the JWT token for the instance.
 
@@ -117,6 +118,8 @@ class TransantiagoAPI:
 
         Returns:
         - dict: The response object containing the route information for the specified bus.
+
+
         """
         endpoint = add_params(self.GET_ROUTE_ENDPOINT, codsint=bus_codsint)
         route = request(endpoint)
@@ -166,22 +169,23 @@ class TransantiagoAPI:
             affected_communes = row.select_one('.hidden-xs:nth-child(4)').text.strip()
             description = row.select_one('.hidden-xs.descripcion').text.strip()
             href = row.select_one('.ampliar-info')['href']
-        
+
             lst_start_date, lst_end_date = [str_date.strip().split() for str_date in str_dates.split('-')]
-            
+
             end_date_valid = len(lst_end_date) == len(lst_start_date)
 
             lst_start_date[0] = int(lst_start_date[0])
             lst_start_date[1] = months[lst_start_date[1]]
             lst_start_date[2] = int(lst_start_date[2])
             start_date = date(lst_start_date[2], lst_start_date[1], lst_start_date[0])
-            
+
             if end_date_valid:
                 lst_end_date[0] = int(lst_end_date[0])
                 lst_end_date[1] = months[lst_end_date[1]]
                 lst_end_date[2] = int(lst_end_date[2])
                 end_date = date(lst_end_date[2], lst_end_date[1], lst_end_date[0])
-            else: end_date = 'undefined'
+            else:
+                end_date = 'undefined'
 
             detour = {
                 'start_date': str(start_date),

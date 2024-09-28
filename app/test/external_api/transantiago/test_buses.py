@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from app.helpers.transantiago import TransantiagoAPI
+from app.external_api.transantiago import TransantiagoAPI
+
 
 class TestTransantiagoAPI(unittest.TestCase):
 
@@ -42,6 +43,7 @@ class TestTransantiagoAPI(unittest.TestCase):
         mock_requests_get.return_value.text = '["bus1", "bus2"]'
         result = transantiago_api.get_all_buses()
         self.assertEqual(result, ["bus1", "bus2"])
+
 
 if __name__ == '__main__':
     unittest.main()
