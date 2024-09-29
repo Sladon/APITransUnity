@@ -6,4 +6,4 @@ load_dotenv()
 
 app = FastAPI()
 
-app.include_router(router, prefix="/buses", tags=["buses"])
+app.include_router(router, tags=["buses"])
