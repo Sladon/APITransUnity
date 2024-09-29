@@ -2,6 +2,7 @@ import json
 import requests
 from datetime import datetime, timedelta
 
+
 def add_params(url, **args) -> str:
     """
     Adds query parameters to a given URL.
@@ -19,7 +20,8 @@ def add_params(url, **args) -> str:
         return f"{url}{separator}{params}"
     return url
 
-def request(url, json_data:dict=None, method:str='get', timeout=10, plain_text:bool=False):
+
+def request(url, json_data: dict = None, method: str = 'get', timeout=10, plain_text: bool = False, **args):
     """
     Perform a HTTP request to py specified URL using the given method.
 
@@ -38,15 +40,17 @@ def request(url, json_data:dict=None, method:str='get', timeout=10, plain_text:b
     """
     try:
         if method == 'get':
-            res = requests.get(url, timeout=timeout, json=json_data)
+            res = requests.get(url, timeout=timeout, json=json_data, **args)
         elif method == 'post':
-            res = requests.post(url, timeout=timeout, json=json_data)
+            res = requests.post(url, timeout=timeout, json=json_data, **args)
         res.raise_for_status()
-        if plain_text: return res.text
+        if plain_text:
+            return res.text
         return json.loads(res.text)
     except requests.exceptions.RequestException as e:
         print(f"Error making request: {e}")
         return None
+
 
 def get_date(time_offset: int = 10) -> datetime:
     current_date = datetime.now()

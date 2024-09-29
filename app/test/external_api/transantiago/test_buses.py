@@ -1,13 +1,13 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from app.external_api.transantiago import TransantiagoAPI
+from app.external_api.red_movilidad import RedMovilidadApi
 
 
 class TestTransantiagoAPI(unittest.TestCase):
 
     @patch("requests.get")
     def test_set_token(self, mock_requests_get):
-        transantiago_api = TransantiagoAPI()
+        transantiago_api = RedMovilidadApi()
         base64_mock = "c2VjcmV0"
         mock_requests_get.side_effect = [
             MagicMock(text='["123","456"]'),
@@ -18,28 +18,28 @@ class TestTransantiagoAPI(unittest.TestCase):
 
     @patch("requests.get")
     def test_get_stop_buses(self, mock_requests_get):
-        transantiago_api = TransantiagoAPI()
+        transantiago_api = RedMovilidadApi()
         mock_requests_get.return_value.text = '["bus1", "bus2"]'
         result = transantiago_api.get_stop_buses("123")
         self.assertEqual(result, ["bus1", "bus2"])
 
     @patch("requests.get")
     def test_get_stops(self, mock_requests_get):
-        transantiago_api = TransantiagoAPI()
+        transantiago_api = RedMovilidadApi()
         mock_requests_get.return_value.text = '["stop1", "stop2"]'
         result = transantiago_api.get_stops()
         self.assertEqual(result, ["stop1", "stop2"])
 
     @patch("requests.get")
     def test_get_bus_route(self, mock_requests_get):
-        transantiago_api = TransantiagoAPI()
+        transantiago_api = RedMovilidadApi()
         mock_requests_get.return_value.text = '{"route": "bus_route"}'
         result = transantiago_api.get_bus_route("456")
         self.assertEqual(result, {"route": "bus_route"})
 
     @patch("requests.get")
     def test_get_all_buses(self, mock_requests_get):
-        transantiago_api = TransantiagoAPI()
+        transantiago_api = RedMovilidadApi()
         mock_requests_get.return_value.text = '["bus1", "bus2"]'
         result = transantiago_api.get_all_buses()
         self.assertEqual(result, ["bus1", "bus2"])

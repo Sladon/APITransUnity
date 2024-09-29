@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from ....external_api.transantiago import TransantiagoAPI
+from ....external_api.red_movilidad import RedMovilidadApi
 from time import time
 from fastapi import APIRouter, Path
 
@@ -17,7 +17,7 @@ class TransantiagoData:
     REFRESH_BUSES: int = 60*60*24
 
     def __init__(self):
-        self.api = TransantiagoAPI()
+        self.api = RedMovilidadApi()
 
         self.__bus_stops: list[int] = self.api.get_stops()
         self.__bus_stops_last_update: float = time()

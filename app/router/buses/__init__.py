@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from .red_movilidad import router as red_router
+from .dtpm import router as dtpm_router
 
 
 router = APIRouter(
@@ -10,3 +11,4 @@ router = APIRouter(
 
 
 router.include_router(red_router)
+router.include_router(dtpm_router)

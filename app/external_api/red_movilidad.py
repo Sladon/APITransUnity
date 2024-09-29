@@ -11,7 +11,7 @@ from datetime import date
 from .general import add_params, request
 
 
-class TransantiagoAPI:
+class RedMovilidadApi:
     """
     A class for interacting with the Transantiago API.
 
@@ -26,7 +26,7 @@ class TransantiagoAPI:
     - TIMEOUT (int): Timeout for requests
 
     Methods:
-    - __init__: Initializes an instance of the TransantiagoAPI class.
+    - __init__: Initializes an instance of the RedMovilidadApi class.
     - set_token: Sets the JWT token for the instance.
     - get_token: Gets the stored JWT token.
     - get_stop_buses: Retrieves bus arrival information for a specific bus stop.
