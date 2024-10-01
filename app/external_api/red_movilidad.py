@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import date
 
-from .general import add_params, request
+from ..utils.external_api import request, add_params
 
 
 class RedMovilidadApi:

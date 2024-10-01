@@ -6,57 +6,6 @@ from numpy import absolute
 GET_ONE_REGISTRY_TIME = 1
 
 
-class Position:
-    def __init__(
-        self, gps_utc_time: datetime, latitude: float, longitude: float,
-        instant_velocity: float, geographic_direction: float, journey_phase: str,
-        console_route: str, synoptic_route: str, date_save_time: datetime, bus_license_plate: str
-    ):
-        self.gps_utc_time = gps_utc_time
-        self.latitude = latitude
-        self.longitude = longitude
-        self.instant_velocity = instant_velocity
-        self.geographic_direction = geographic_direction
-        self.journey_phase = journey_phase
-        self.console_route = console_route
-        self.synoptic_route = synoptic_route
-        self.date_save_time = date_save_time
-        self.bus_license_plate = bus_license_plate
-
-    def as_dict(self):
-        return {
-            "gps_utc_time": self.gps_utc_time,
-            "latitude": self.latitude,
-            "longitude": self.longitude,
-            "instant_velocity": self.instant_velocity,
-            "geographic_direction": self.geographic_direction,
-            "journey_phase": self.journey_phase,
-            "console_route": self.console_route,
-            "synoptic_route": self.synoptic_route,
-            "date_save_time": self.date_save_time,
-            "license_plate": self.bus_license_plate
-        }
-
-
-class Bus:
-    def __init__(self, license_plate: str, operator: float, service: float):
-        self.license_plate = license_plate
-        self.operator = operator
-        self.service = service
-
-    def __eq__(self, other):
-        if isinstance(other, Bus):
-            return self.license_plate == other.license_plate
-        return False
-
-    def as_dict(self):
-        return {
-            "license_plate": self.license_plate,
-            "operator": self.operator,
-            "service": self.service
-        }
-
-
 def parse_datetime(date_str: str) -> datetime:
     return datetime.strptime(date_str, '%d-%m-%Y %H:%M:%S')
 
@@ -142,7 +91,7 @@ def get_historic_registries(positions_df: pd.DataFrame, date_from: datetime = No
     return filtered_df
 
 
-def get_active_moving_buses(positions_df: pd.DataFrame) -> list[Bus]:
+def get_active_moving_buses(positions_df: pd.DataFrame) -> pd.DataFrame:
 
     unique_latest_rows = positions_df.loc[positions_df.groupby('license_plate')['gps_utc_time'].idxmax()]
     latest_date = unique_latest_rows['gps_utc_time'].max()

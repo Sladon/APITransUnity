@@ -1,5 +1,5 @@
 from os import getenv
-from .general import request
+from ..utils.external_api import request
 from requests.auth import HTTPBasicAuth
 
 

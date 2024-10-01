@@ -1,4 +1,5 @@
-from .general import request, get_date
+from ..utils.external_api import request, get_date
+
 
 class Turbus:
     """
@@ -16,7 +17,7 @@ class Turbus:
     """
 
     BASE: str = "https://new.turbus.cl/turbuscl/"
-    RESOURCES_ENDPOINT: str = BASE + "recursos/"    
+    RESOURCES_ENDPOINT: str = BASE + "recursos/"
     ASSETS_ENDPOINT: str = BASE + "assets/"
 
     def get_destinations(self):
@@ -44,9 +45,9 @@ class Turbus:
         result = request(url)
         return result
 
-    def get_available_buses(self, line_code: int, mnemo_origin: str, 
-                            mnemo_destination: str, number_of_seats: int = 1, 
-                            departure_date: str = get_date().strftime("%d/%m/%Y"), 
+    def get_available_buses(self, line_code: int, mnemo_origin: str,
+                            mnemo_destination: str, number_of_seats: int = 1,
+                            departure_date: str = get_date().strftime("%d/%m/%Y"),
                             departure_time: int = int(get_date().strftime("%H%M")),
                             max_departure_time: int = 0, ):
         """
