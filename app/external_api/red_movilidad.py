@@ -44,7 +44,7 @@ class RedMovilidadApi:
     URL_FOR_TOKEN = BASE_DOMAIN + "planifica-tu-viaje/cuando-llega/?codsimt="
     GET_ARRIVALS_ENDPOINT = "https://www.red.cl/predictor/prediccion/"
 
-    TIMEOUT = 10
+    TIMEOUT = 30
 
     def __init__(self):
         self.__token: str = ""
