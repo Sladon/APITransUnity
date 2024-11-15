@@ -1,9 +1,3 @@
-from fastapi import FastAPI
-from .router import router
-from dotenv import load_dotenv
+from .main import app
 
-load_dotenv()
-
-app = FastAPI()
-
-app.include_router(router, tags=["buses"])
+__all__ = ["app"]
